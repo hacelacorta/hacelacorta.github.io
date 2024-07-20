@@ -295,29 +295,28 @@
         <h2><span>Contacto</span> y pedidos</h2>
         <div class="contactTab">
           <address>
-            <h3>Ofrecemos retiro en local</h3>
-			<p><strong>Dirección:</strong> Baquedano 3101</p>
-            <p><strong>E-mail:</strong> info@yourdomain.com</p>
-            <p><strong>Whatsapp:</strong> 981234567</p>
+            <h3>Ofrecemos retiro en local previo pago</h3>
+			<p><strong>Dirección:</strong> Baquedano 3101 La Serena</p>
+            <p><strong>Whatsapp:</strong> +56950190334</p>
           </address>
           <aside>
             <h3>Su orden</h3>
-            <form method="post">
+            <form method="post" id="formulario">
               <input
                 type="text"
-                name="name"
+                name="name" id="name"
                 required
-                placeholder="Your Name *"
+                placeholder="Nombre Completo *"
               />
-              <input
-                type="email"
-                name="email"
-                required
-                placeholder="E-mail *"
-              />
-              <input type="tel" name="ph" required placeholder="Phone No *" />
-              <textarea name="oderDetail" placeholder="Oder Details"></textarea>
-              <button type="submit">Enviar</button>
+             
+              <input 
+			  type="tel" 
+			  name="ph"  id="ph" 
+			  required 
+			  placeholder="Teléfono *" 
+			  />			  
+              <textarea name="oderDetail" id="oderDetail" placeholder="Detalle de la orden"></textarea>
+              <button type="submit" id="submit">Enviar por WS</button>
             </form>
           </aside>
         </div>
@@ -432,6 +431,46 @@
 	  document.body.scrollTop = 0;
 	  document.documentElement.scrollTop = 0;
 	}
+	
+	
+	
+	function isMobile() {
+    if (sessionStorage.desktop)
+        return false;
+    else if (localStorage.mobile)
+        return true;
+    var mobile = ['iphone', 'ipad', 'android', 'blackberry', 'nokia', 'opera mini', 'windows mobile', 'windows phone', 'iemobile'];
+    for (var i in mobile)
+        if (navigator.userAgent.toLowerCase().indexOf(mobile[i].toLowerCase()) > 0) return true;
+    return false;
+}
+
+const formulario = document.querySelector('#formulario');
+const buttonSubmit = document.querySelector('#submit');
+const urlDesktop = 'https://web.whatsapp.com/';
+const urlMobile = 'whatsapp://';
+const telefono = '+56985991367';
+
+formulario.addEventListener('submit', (event) => {
+    event.preventDefault()
+    buttonSubmit.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>'
+    buttonSubmit.disabled = true
+    setTimeout(() => {
+        let nombre = document.querySelector('#name').value
+        let ph = document.querySelector('#ph').value
+        let oderDetail = document.querySelector('#oderDetail').value
+        let mensaje = 'send?phone=' + telefono + '&text=🍔🍅🍴😋🍴🍅🍔%0A*Comida al paso YK*%0A%0A*Nombre*%0A' + nombre + '%0A%0A*Teléfono*%0A' + ph + '%0A%0A*¿Cuál es su pedido?*%0A' + oderDetail + ''
+        if(isMobile()) {
+            window.open(urlMobile + mensaje, '_blank')
+        }else{
+            window.open(urlDesktop + mensaje, '_blank')
+        }
+        buttonSubmit.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar WhatsApp'
+        buttonSubmit.disabled = false
+    }, 3000);
+});
+	
+	
 	</script>
   </body>
 </html>
