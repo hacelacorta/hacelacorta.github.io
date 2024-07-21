@@ -401,7 +401,7 @@
 	
 	<button onclick="" id="myBtn" title="Go to top"><a href="#popular-dishes" id="tp-btn">Menú</a></button>
 	 
-	 
+	<script type="text/javascript" src="dist/purify.min.js"></script>
     <script type="text/javascript">
       const menuBtn = document.getElementById("menu");
       const menuBar = document.getElementById("menuBar");
@@ -456,10 +456,18 @@ formulario.addEventListener('submit', (event) => {
     buttonSubmit.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>'
     buttonSubmit.disabled = true
     setTimeout(() => {
-        let nombre = document.querySelector('#name').value
-        let ph = document.querySelector('#ph').value
-        let oderDetail = document.querySelector('#oderDetail').value
-        let mensaje = 'send?phone=' + telefono + '&text=🍔🍅🍴😋🍴🍅🍔%0A*Comida al paso YK*%0A%0A*Nombre*%0A' + nombre + '%0A%0A*Teléfono*%0A' + ph + '%0A%0A*¿Cuál es su pedido?*%0A' + oderDetail + ''
+        let nombre = document.querySelector('#name').value.trim()
+        let ph = document.querySelector('#ph').value.trim()
+        let oderDetail = document.querySelector('#oderDetail').value.trim()
+		const n = DOMPurify.sanitize(nombre);
+        const t = DOMPurify.sanitize(ph);
+		const d = DOMPurify.sanitize(oderDetail);
+		if (!validation(nombre,ph,oderDetail)) {
+			buttonSubmit.innerHTML = '<i class="fab fa-whatsapp"></i> Enviar WhatsApp'
+			buttonSubmit.disabled = false
+            return;
+        }
+        let mensaje = 'send?phone=' + telefono + '&text=🍔🍅🍴😋🍴🍅🍔%0A*Comida al paso YK*%0A%0A*Nombre*%0A' + n + '%0A%0A*Teléfono*%0A' + t + '%0A%0A*¿Cuál es su pedido?*%0A' + d + ''
         if(isMobile()) {
             window.open(urlMobile + mensaje, '_blank')
         }else{
@@ -470,6 +478,10 @@ formulario.addEventListener('submit', (event) => {
     }, 3000);
 });
 	
+function validation(n,t,d)
+{
+           return n.length > 0;
+}
 	
 	</script>
   </body>
